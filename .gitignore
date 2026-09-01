@@ -1,0 +1,14 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+
+# 插件运行时数据不应提交
+bindings.json
+aliases.json
+lxns_bindings.json
+df_oauth_bindings.json
+
+# AWMC 完整曲绘包（体积较大，本地保留；提交仓库时忽略，B50 自动在线回退）
+assets/awmc/

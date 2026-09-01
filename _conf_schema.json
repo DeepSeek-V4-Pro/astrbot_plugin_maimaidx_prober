@@ -1,0 +1,199 @@
+{
+  "plugin": {
+    "description": "插件基础设置",
+    "type": "object",
+    "items": {
+      "enabled": {
+        "description": "保留的配置占位开关（AstrBot 侧由插件管理控制启停）",
+        "type": "bool",
+        "default": true,
+        "invisible": true
+      },
+      "config_version": {
+        "description": "保留的配置版本标记",
+        "type": "string",
+        "default": "3.2.0",
+        "invisible": true
+      },
+      "auto_install_deps": {
+        "description": "依赖缺失时自动执行 pip 安装",
+        "hint": "默认关闭。建议手动运行 install_deps.py；容器/无交互环境可开启。",
+        "type": "bool",
+        "default": false
+      },
+      "game_version": {
+        "description": "落雪 DX Rating 趋势接口的默认版本号",
+        "hint": "如 25500 = 舞萌DX 2026。",
+        "type": "int",
+        "default": 25500
+      },
+      "developer_qq": {
+        "description": "允许使用开发者凭证的 QQ 号列表",
+        "hint": "为空时任何 QQ 都无法使用落雪/水鱼开发者功能。",
+        "type": "list",
+        "default": []
+      }
+    }
+  },
+  "server": {
+    "description": "diving-fish（水鱼）服务器",
+    "type": "object",
+    "items": {
+      "base_url": {
+        "description": "API 服务器地址",
+        "type": "string",
+        "default": "https://www.diving-fish.com/api/maimaidxprober"
+      },
+      "request_timeout": {
+        "description": "请求超时时间（秒）",
+        "type": "int",
+        "slider": { "min": 5, "max": 120, "step": 1 },
+        "default": 30
+      },
+      "music_cache_ttl": {
+        "description": "曲库缓存时间（秒）",
+        "type": "int",
+        "default": 300
+      },
+      "developer_token": {
+        "description": "水鱼开发者 API 密钥",
+        "hint": "/mai plate 按版本查询成绩用；在水鱼开发者面板申请。",
+        "type": "string",
+        "secret": true,
+        "default": ""
+      },
+      "enable_oauth": {
+        "description": "启用水鱼账号 OAuth",
+        "hint": "公开客户端，设备码绑定 + 每用户 refresh token。",
+        "type": "bool",
+        "default": false
+      },
+      "oauth_issuer": {
+        "description": "水鱼账号授权服务器根地址",
+        "type": "string",
+        "default": "https://auth.diving-fish.com"
+      },
+      "oauth_client_id": {
+        "description": "水鱼 OAuth 公开客户端 client_id",
+        "type": "string",
+        "default": ""
+      },
+      "oauth_scope": {
+        "description": "水鱼 OAuth scope",
+        "hint": "上传需额外配置 prober.records.write。",
+        "type": "string",
+        "default": "prober.records.read"
+      }
+    }
+  },
+  "lxns": {
+    "description": "lxns（落雪）服务器",
+    "type": "object",
+    "items": {
+      "enable": {
+        "description": "是否启用 lxns 公开数据补全",
+        "type": "bool",
+        "default": true
+      },
+      "base_url": {
+        "description": "lxns API 服务器地址",
+        "type": "string",
+        "default": "https://maimai.lxns.net/api/v0"
+      },
+      "asset_url": {
+        "description": "lxns 资源 CDN 地址",
+        "type": "string",
+        "default": "https://assets.lxns.net"
+      },
+      "request_timeout": {
+        "description": "请求超时时间（秒）",
+        "type": "int",
+        "default": 30
+      },
+      "music_cache_ttl": {
+        "description": "lxns 曲库缓存时间（秒）",
+        "type": "int",
+        "default": 300
+      },
+      "enable_oauth": {
+        "description": "是否启用落雪 OAuth 绑定（/mai lxns bind）",
+        "type": "bool",
+        "default": false
+      },
+      "oauth_client_id": {
+        "description": "落雪 OAuth 应用 ID",
+        "type": "string",
+        "default": ""
+      },
+      "oauth_client_secret": {
+        "description": "落雪 OAuth 应用密钥",
+        "hint": "公共客户端可留空（走 PKCE）。",
+        "type": "string",
+        "secret": true,
+        "default": ""
+      },
+      "oauth_authorize_url": {
+        "description": "OAuth 授权端点",
+        "type": "string",
+        "default": "https://maimai.lxns.net/oauth/authorize"
+      },
+      "oauth_redirect_uri": {
+        "description": "OAuth 回调地址",
+        "hint": "留空使用 OOB（授权成功后直接显示授权码）。",
+        "type": "string",
+        "default": ""
+      },
+      "oauth_scope": {
+        "description": "OAuth 授权范围（空格分隔）",
+        "type": "string",
+        "default": "read_player write_player read_user_profile"
+      },
+      "enable_developer_api": {
+        "description": "是否启用落雪开发者模式（好友码查询）",
+        "type": "bool",
+        "default": false
+      },
+      "developer_api_key": {
+        "description": "落雪开发者 API 密钥",
+        "type": "string",
+        "secret": true,
+        "default": ""
+      }
+    }
+  },
+  "render": {
+    "description": "图片渲染（Playwright）",
+    "type": "object",
+    "items": {
+      "device_scale_factor": {
+        "description": "渲染缩放倍率",
+        "hint": "2.0 为高清，1.0 为标准。",
+        "type": "float",
+        "slider": { "min": 1, "max": 3, "step": 0.1 },
+        "default": 2.0
+      },
+      "image_timeout_ms": {
+        "description": "等待图片加载的超时时间（毫秒）",
+        "type": "int",
+        "default": 15000
+      },
+      "browser_executable": {
+        "description": "浏览器可执行文件路径",
+        "hint": "留空时自动探测系统 Chrome / Edge，找不到再回退 Playwright Chromium。",
+        "type": "string",
+        "default": ""
+      },
+      "headless": {
+        "description": "无头模式运行",
+        "type": "bool",
+        "default": true
+      },
+      "no_sandbox": {
+        "description": "追加 --no-sandbox 参数",
+        "hint": "容器环境需要开启。",
+        "type": "bool",
+        "default": true
+      }
+    }
+  }
+}
