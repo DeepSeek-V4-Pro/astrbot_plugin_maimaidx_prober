@@ -15,7 +15,7 @@ astrbot_plugin_maimaidx_prober/
 │  ├─ services/           # 业务服务：查分、音乐、渲染、OAuth
 │  ├─ clients/            # diving-fish / lxns API 客户端
 │  ├─ stores/             # JSON 存储：绑定、别名
-│  └─ renderers/          # HTML 面板渲染 + B50 PIL 渲染
+│  └─ renderers/          # HTML 面板渲染 + B50 / 信息卡 PIL 渲染
 ├─ assets/                # 本地素材（B50 版式、字体、曲绘）
 └─ scripts/
    └─ quick_command_test.py   # 只读回归脚本
@@ -59,6 +59,10 @@ astrbot_plugin_maimaidx_prober/
 
 B50 / AP50 不走 HTML，而是 `core/renderers/b50_awmc_pillow.py` 的 PIL 版式，
 素材在 `assets/awmc_core`，曲绘优先本地 `assets/awmc/mai/cover`，缺失时在线回退。
+
+单曲详情与落雪单曲最佳走 `core/renderers/awmc_info_pillow.py`：直接按
+`chart_info.png` / `play_info.png` AWMC 模板拼版，同样优先本地曲绘、远程兜底。
+帮助页由 `core/renderers/help.py` 统一生成总览、`df help` 与 `lxns help`。
 
 ## 回归测试
 

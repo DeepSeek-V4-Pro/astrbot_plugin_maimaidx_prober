@@ -1,6 +1,6 @@
 name: astrbot_plugin_maimaidx_prober
 display_name: MaiMai DX 查分器（AstrBot 适配）
-short_desc: 舞萌 DX 双源查分（水鱼 + 落雪）：B50、热力图、趋势、年度回顾、猜歌等。
+short_desc: 舞萌 DX 双源查分（水鱼 + 落雪）：B50、信息卡、热力图、趋势、年度回顾、猜歌等。
 desc: |
   舞萌 DX（maimai DX）双源查分插件。
 
@@ -9,12 +9,12 @@ desc: |
   - lxns（落雪）：玩家资料、AP50、热力图、趋势、历史、排行、年度回顾、收藏品、
     双向成绩同步、曲目评论
 
-  另有曲目搜索、谱面统计、热门歌曲、Rating 排行榜、今日运势、别称管理、
-  Maidle 猜歌以及 LLM 工具（曲库搜索）。
+  另有 AWMC 信息卡渲染、三页帮助、曲目搜索、谱面统计、热门歌曲、
+  Rating 排行榜、今日运势、别称管理、Maidle 猜歌以及 LLM 工具（曲库搜索）。
 
   使用 `/mai help` 查看全部命令。图片类命令会自动使用系统 Chrome / Edge，
   未安装时执行 `python -m playwright install chromium`。
-version: 1.0.0
+version: 1.1.0
 author: DeepSeek-V4
 category: 娱乐
 tags:

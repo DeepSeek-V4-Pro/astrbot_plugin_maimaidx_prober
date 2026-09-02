@@ -1,10 +1,10 @@
-# MaiMai DX 查分器（AstrBot 适配 · v1.0.0）
+# MaiMai DX 查分器（AstrBot 适配 · v1.1.0）
 
 AstrBot 版的舞萌 DX 双源查分插件，连接
 [diving-fish（水鱼）](https://www.diving-fish.com) 与
 [lxns（落雪）](https://maimai.lxns.net) 两个查分平台。
 
-提供 B50 成绩图（AWMC/Yuzu 原版版式）、个人成绩、曲目搜索、Maidle 猜歌、
+提供 B50 成绩图与单曲信息卡（AWMC/Yuzu 原版版式）、个人成绩、曲目搜索、Maidle 猜歌、
 谱面统计、今日运势、热门歌曲、Rating 排行榜、按版本查成绩，以及落雪独有的
 热力图、趋势、单曲历史/排行、年度回顾、收藏品、双向成绩同步等能力。
 
@@ -13,6 +13,13 @@ AstrBot 版的舞萌 DX 双源查分插件，连接
 - **B50 成绩图**：AWMC/Yuzu 原版版式（固定 1400x1600 画布、难度贴图成绩卡、
   评级/FC/FS/DX 星、头像、段位/阶级徽章）；BEST 35 / BEST 15 不足时保持空白
   槽位。水鱼 5 位新歌 ID 会自动映射本地曲绘，缺失时按「水鱼 → 落雪」顺序在线回退。
+- **信息卡渲染**：`/mai song` 单曲详情与落雪 `/mai lxns best` 改用 AWMC
+  `chart_info` / `play_info` 模板 Pillow 拼版；B50 补充渐变背景、随机默认头像与
+  落雪年份页脚素材。
+- **今日运势卡片**：7 套随机角色主题（prism_plus / circle 立绘与 AWMC 前景 logo），
+  曲目 ID/类型补充、按难度分色的定数标签、祝福语并入页脚。
+- **三页帮助**：`/mai help` 为命令总览，另提供 `/mai df help`、`/mai lxns help`
+  平台专属帮助页。
 - **个人成绩摘要**：Rating、段位、曲目数、难度分布、Top 成绩。
 - **曲目搜索与详情**：名称/作者/ID/别称搜索，封面 + 落雪补全（分类/版本/谱师/定数）。
 - **猜歌（Maidle）**：水鱼猜歌游戏，图片线索反馈。
@@ -23,6 +30,8 @@ AstrBot 版的舞萌 DX 双源查分插件，连接
   收藏品、玩家资料卡、AP50、按 QQ 查玩家。
 - **成绩双向同步**：水鱼 → 落雪（`/mai lxns upload`）、落雪 → 水鱼（`/mai df upload`），
   均采用**只升不降**策略。
+- **来源标志增强**：`/mai b50` / `/mai my` 支持 `--水鱼` / `--落雪`，且可放在用户参数前后；
+  落雪头像改用 `assets2.lxns.net` 原始 PNG，规避 WAF。
 
 ## 安装
 
@@ -51,7 +60,7 @@ AstrBot 版的舞萌 DX 双源查分插件，连接
 | --- | --- | --- |
 | 插件 | `developer_qq` | 允许使用开发者凭证（落雪/水鱼）的 QQ 列表，为空则关闭全部开发者功能 |
 | 插件 | `game_version` | 落雪趋势接口默认版本号（25500 = 舞萌DX 2026） |
-| 水鱼 | `developer_token` | 水鱼开发者密钥（`/mai plate` 按版本查成绩用） |
+| 水鱼 | `developer_token` | 水鱼旧版开发者密钥（`/mai plate` 回退；2026-10-01 起停止服务） |
 | 水鱼 | `enable_oauth` 等 | 水鱼账号 OAuth（设备码绑定，需填 `oauth_client_id`） |
 | 落雪 | `enable_oauth` 等 | 落雪 OAuth 绑定（需应用 ID/密钥） |
 | 落雪 | `enable_developer_api` + `developer_api_key` | 好友码查询 / AP50 / 按 QQ 查玩家 |
@@ -70,11 +79,13 @@ AstrBot 版的舞萌 DX 双源查分插件，连接
 
 ## 命令速查
 
-### 基础命令（`/mai`）
+### 命令入口（`/mai`）
 
 | 命令 | 说明 | 输出 |
 |------|------|------|
 | `/mai help` | 命令总览 | 图片 |
+| `/mai df help` | 水鱼（diving-fish）专属命令帮助 | 图片 |
+| `/mai lxns help` | 落雪（lxns）专属命令帮助 | 图片 |
 | `/mai song <关键词/ID>` | 搜索曲目；ID 直接查看详情 | 图片 |
 | `/mai today` | 今日运势 — 宜忌与推荐歌曲 | 图片 |
 | `/mai maidle` | 开始 Maidle 猜歌游戏 | 图片 |
@@ -86,7 +97,7 @@ AstrBot 版的舞萌 DX 双源查分插件，连接
 | `/mai ranking [N]` | DX Rating 排行榜 TOP N | 图片 |
 | `/mai status` | 双服状态检测（水鱼 + 落雪） | 图片 |
 | `/mai pick <A> <B> [C] [D]` | 随机帮你选一个 | 图片 |
-| `/mai plate <版本代号>` | 按版本查询成绩（OAuth / Developer-Token） | 图片 |
+| `/mai plate <版本代号>` | 按版本查询成绩（优先 OAuth；旧 Developer-Token 仅回退） | 图片 |
 | `/mai alias add <ID> <名称>` | 添加本地别称 | 文本 |
 | `/mai alias del <ID> <名称>` | 删除本地别称 | 文本 |
 | `/mai alias list <ID>` | 查看别称 | 图片 |
@@ -96,7 +107,7 @@ AstrBot 版的舞萌 DX 双源查分插件，连接
 | `/mai df unbind` | 解除水鱼 OAuth 绑定 | 文本 |
 | `/mai df status` | 查看水鱼 OAuth 绑定状态 | 文本 |
 
-### 成绩查询（`/mai`）
+### 双源成绩查询（`/mai`）
 
 | 命令 | 说明 | 输出 |
 |------|------|------|
@@ -106,8 +117,9 @@ AstrBot 版的舞萌 DX 双源查分插件，连接
 | `/mai unbind` | 解除绑定 | — |
 
 > 强制数据源：默认自动选源（绑定落雪 → 开发者好友码 → 水鱼兜底）。
-> `--lxns` 强制落雪，`--df` 强制水鱼。好友码查询走落雪开发者 API，
-> 需配置 `developer_api_key` 并把 QQ 加入 `developer_qq` 白名单。
+> `--lxns` / `--落雪` 强制落雪，`--df` / `--水鱼` 强制水鱼；来源标志可放在
+> 用户参数前后。好友码查询走落雪开发者 API，需配置 `developer_api_key`
+> 并把 QQ 加入 `developer_qq` 白名单。
 
 ### 落雪账号（`/mai lxns`）
 
@@ -125,12 +137,14 @@ AstrBot 版的舞萌 DX 双源查分插件，连接
 | `/mai lxns rank <曲名/ID>` | 单曲分数排行 | 图片 |
 | `/mai lxns year [年份]` | 年度回顾 | 图片 |
 | `/mai lxns collections` | 收藏品（称号/头像/姓名框/背景） | 图片 |
-| `/mai lxns best [好友码] <曲名>` | 单曲所有谱面最佳成绩 | 图片 |
+| `/mai lxns best [好友码] <曲名/ID>` | 单曲所有谱面最佳成绩（AWMC `play_info`） | 图片 |
 | `/mai lxns upload` | 水鱼成绩同步到落雪（只升不降） | 文本 |
 | `/mai df upload` | 落雪成绩同步到水鱼（反向，只升不降） | 文本 |
 | `/mai lxns ap50 <好友码>` | All Perfect 50（开发者模式） | 图片 |
 | `/mai lxns qq <QQ号>` | 按 QQ 查玩家资料（开发者模式） | 图片 |
-| `/mai lxns comment list/post/like` | 曲目评论（落雪服务端暂未开放） | 文本 |
+| `/mai lxns comment list <曲名/ID>` | 查看曲目评论（OAuth） | 文本 |
+| `/mai lxns comment <曲名/ID> <内容>` | 发表曲目评论（OAuth） | 文本 |
+| `/mai lxns comment like <评论ID>` | 点赞曲目评论（OAuth） | 文本 |
 
 ### AI 工具
 
@@ -157,7 +171,7 @@ AstrBot 版的舞萌 DX 双源查分插件，连接
 
 - `core/`：业务模块（命令 / 服务 / 渲染 / 客户端 / 存储）；
 - `core/compat.py`：命令层与 AstrBot 之间的轻量适配基座；
-- `assets/awmc_core`（约 19MB）：B50 版式的 UI 贴图与字体，**必需**；
+- `assets/awmc_core`（约 19MB）：B50 / 单曲信息卡的 AWMC 贴图与字体，**必需**；
 - `assets/awmc/mai/cover`（约 388MB）：B50 曲绘离线缓存，**可选，不随仓库分发**。
   未放置时 B50 会从水鱼 / lxns 在线拉取曲绘，首次渲染稍慢；需要离线时自行把
   曲绘包放到该目录即可（已被 `.gitignore` 忽略）。
@@ -199,7 +213,7 @@ B50 使用固定 1400x1600 画布：BEST 35 恒为 7 行、BEST 15 恒为 3 行�
 ### Q8: 落雪 / 水鱼数据不一样，以哪个为准
 
 自动选源时优先落雪（已绑定）→ 开发者好友码 → 水鱼兜底；可用 `--lxns` /
-`--df` 固定数据源。
+`--落雪`、`--df` / `--水鱼` 固定数据源，且可放在用户参数前后。
 
 ### Q9: 新歌曲绘显示成同一张占位图
 
@@ -210,8 +224,8 @@ B50 使用固定 1400x1600 画布：BEST 35 恒为 7 行、BEST 15 恒为 3 行�
 
 1. **落雪评论接口未开放**：`/mai lxns comment *` 实测服务端 404，命令保留并友好提示。
 2. **水鱼无头像/段位数据**：水鱼来源的 B50 显示默认图标，不显示阶级/段位徽章。
-3. **lxns 资源 CDN 反爬**：封面/头像/收藏品图已改用 `!webp` 后缀规避 WAF，
-   极小概率仍可能缺图并回退水鱼。
+3. **lxns 资源 CDN 反爬**：封面/收藏品图已使用 `!webp` 后缀，玩家头像改用
+   `assets2.lxns.net` 原始 PNG，极小概率仍可能缺图并回退水鱼。
 4. **首次渲染较慢**：内置浏览器首次启动需 10-30 秒。
 
 ## 卸载
@@ -233,7 +247,7 @@ B50 使用固定 1400x1600 画布：BEST 35 恒为 7 行、BEST 15 恒为 3 行�
 | 落雪个人 API 密钥 | `lxns_bindings.json` | 读取 / 上传落雪成绩 | 落雪「账号详情页」重新生成 |
 | 落雪 OAuth 令牌 | `lxns_bindings.json` | 以账号身份访问落雪 | 落雪「已授权应用」撤销 |
 | 落雪开发者密钥（全局） | 插件配置 | 好友码 / AP50 / 按 QQ 查询 | 落雪开发者面板重置 |
-| 水鱼 Developer-Token（全局） | 插件配置 | `/mai plate` 按版本查询 | 水鱼开发者面板重置 |
+| 水鱼 Developer-Token（全局） | 插件配置 | `/mai plate` 旧版回退（2026-10-01 停止服务） | 水鱼开发者面板重置，或改用 OAuth |
 
 要点：
 

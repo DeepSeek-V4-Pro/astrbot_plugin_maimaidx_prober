@@ -11,6 +11,7 @@ import base64
 import concurrent.futures
 import functools
 import io
+import random
 import unicodedata
 import urllib.request
 from pathlib import Path
@@ -33,6 +34,14 @@ CARD_ASSETS = (
     "b50_score_master.png",
     "b50_score_remaster.png",
 )
+DEFAULT_AVATARS = (
+    "UI_Icon_509506.png",
+    "default_avatars/lxbot.webp",
+    "default_avatars/salt.webp",
+    "default_avatars/reisasol.webp",
+    "default_avatars/icon-512.png",
+)
+YEAR_IN_REVIEW_FOOTER = "year_in_review_footer.webp"
 
 RANK_MAP = {
     "d": "D", "c": "C", "b": "B", "bb": "BB", "bbb": "BBB",
@@ -150,6 +159,34 @@ def _open(path: Path, size: tuple[int, int] | None = None) -> Image.Image:
     return image
 
 
+@functools.lru_cache(maxsize=1)
+def _simple_gradient_background() -> Image.Image:
+    """生成 1400x1600 的简洁渐变背景（不含装饰元素）。"""
+
+    size = (1400, 1600)
+    grid_size = (96, 96)
+    top_left = (92, 205, 248)
+    top_right = (183, 171, 250)
+    bottom_left = (118, 226, 234)
+    bottom_right = (242, 157, 218)
+
+    def _mix(
+        c1: tuple[int, int, int], c2: tuple[int, int, int], t: float
+    ) -> tuple[int, int, int]:
+        return tuple(int(a + (b - a) * t) for a, b in zip(c1, c2))
+
+    grid = Image.new("RGB", grid_size)
+    for y in range(grid_size[1]):
+        ty = y / (grid_size[1] - 1)
+        for x in range(grid_size[0]):
+            tx = x / (grid_size[0] - 1)
+            top = _mix(top_left, top_right, tx)
+            bottom = _mix(bottom_left, bottom_right, tx)
+            grid.putpixel((x, y), _mix(top, bottom, ty))
+    grid = grid.transpose(Image.Transpose.FLIP_LEFT_RIGHT)
+    return grid.resize(size, Image.Resampling.BICUBIC).convert("RGBA")
+
+
 def _theme_path(assets: Path, filename: str) -> Path:
     pic = assets / "mai" / "pic"
     filename = "b50.png" if filename == "b50_bg.png" else filename
@@ -182,6 +219,20 @@ def _optional(
     return _open(path, size) if path.is_file() else None
 
 
+def _random_default_avatar(assets: Path) -> Image.Image:
+    """随机选择一个默认头像；缺失候选时回退原始游戏默认图标。"""
+
+    pic = assets / "mai" / "pic"
+    candidates = [
+        pic / name
+        for name in DEFAULT_AVATARS
+        if (pic / name).is_file()
+    ]
+    if not candidates:
+        candidates = [pic / "UI_Icon_509506.png"]
+    return _open(random.choice(candidates), (120, 120))
+
+
 def _placeholder_cover(size: tuple[int, int]) -> Image.Image:
     image = Image.new("RGBA", size, (205, 180, 240, 255))
     draw = ImageDraw.Draw(image)
@@ -205,7 +256,7 @@ def _fetch_image(url: str) -> Image.Image | None:
         return None
     try:
         request = urllib.request.Request(
-            url, headers={"User-Agent": "AstrBot/1.0 maimaidx-prober"}
+            url, headers={"User-Agent": "AstrBot/1.1 maimaidx-prober"}
         )
         with urllib.request.urlopen(request, timeout=10) as response:
             data = response.read()
@@ -220,11 +271,9 @@ def _cover_urls(song_id: Any) -> tuple[str, ...]:
     except (TypeError, ValueError):
         sid = 0
     return (
-        # 水鱼曲绘对 5 位歌曲 ID 是权威来源，优先使用；lxns 对超出其
-        # ID 范围的请求会返回通用占位图而不是 404，放在后面兜底。
-        f"https://www.diving-fish.com/covers/{sid:05d}.png",
-        f"https://assets.lxns.net/maimai/jacket/{sid % 10000}.png!webp",
         f"https://assets.lxns.net/maimai/jacket/{sid}.png!webp",
+        f"https://assets.lxns.net/maimai/jacket/{sid % 10000}.png!webp",
+        f"https://www.diving-fish.com/covers/{sid:05d}.png",
     )
 
 
@@ -237,22 +286,8 @@ def _load_covers(sd: list[dict], dx: list[dict]) -> dict[str, Image.Image]:
             continue
         if not sid:
             continue
-        # 本地曲绘按去掉 10000 偏移后的 ID 命名：水鱼 5 位新歌 ID
-        # （如 11556）对应本地 1556.png；旧 ID 直接用原值。
-        candidates: list[str] = [sid]
-        try:
-            candidates.append(str(int(sid) % 10000))
-        except ValueError:
-            pass
-        local = next(
-            (
-                COVER_ROOT / f"{candidate}.png"
-                for candidate in candidates
-                if (COVER_ROOT / f"{candidate}.png").is_file()
-            ),
-            None,
-        )
-        if local is not None:
+        local = COVER_ROOT / f"{sid}.png"
+        if local.is_file():
             image = _open(local)
             result[sid] = image
         else:
@@ -301,9 +336,7 @@ class AWMCRenderer:
         self.covers = covers or {}
         self.avatar = avatar
 
-        self.image = _open(_theme_path(self.assets, "b50_bg.png"))
-        if self.image.size != (1400, 1600):
-            self.image = self.image.resize((1400, 1600), Image.Resampling.LANCZOS)
+        self.image = _simple_gradient_background().copy()
         self.draw = ImageDraw.Draw(self.image)
         self.cn_fonts: dict[int, ImageFont.FreeTypeFont] = {}
         self.torus_fonts: dict[int, ImageFont.FreeTypeFont] = {}
@@ -351,12 +384,17 @@ class AWMCRenderer:
         rating = _i(player.get("rating"))
         self._paste_optional("logo.png", (249, 120), (14, 60))
         self._paste_optional("UI_Plate_550101.png", (800, 130), (300, 60))
+        if source_label == "落雪":
+            footer = _optional(self.assets, YEAR_IN_REVIEW_FOOTER, (180, 180))
+            if footer is not None:
+                self.image.alpha_composite(footer, (1160, 45))
 
-        default_icon = _optional(self.assets, "UI_Icon_509506.png", (120, 120))
-        if default_icon is not None:
-            self.image.alpha_composite(default_icon, (305, 65))
         if self.avatar is not None:
             self.image.alpha_composite(self.avatar.resize((120, 120)), (305, 65))
+        else:
+            self.image.alpha_composite(
+                _random_default_avatar(self.assets), (305, 65)
+            )
 
         self._paste_optional(_rating_asset(rating), (186, 35), (435, 72))
         digits_ok = True

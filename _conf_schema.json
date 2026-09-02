@@ -12,7 +12,7 @@
       "config_version": {
         "description": "保留的配置版本标记",
         "type": "string",
-        "default": "3.2.0",
+        "default": "3.3.0",
         "invisible": true
       },
       "auto_install_deps": {
@@ -56,8 +56,8 @@
         "default": 300
       },
       "developer_token": {
-        "description": "水鱼开发者 API 密钥",
-        "hint": "/mai plate 按版本查询成绩用；在水鱼开发者面板申请。",
+        "description": "水鱼旧版开发者 API 密钥",
+        "hint": "仅作 /mai plate 回退；2026-10-01 起停止服务，优先使用 OAuth。",
         "type": "string",
         "secret": true,
         "default": ""

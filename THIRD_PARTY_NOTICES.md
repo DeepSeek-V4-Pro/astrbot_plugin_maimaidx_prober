@@ -3,7 +3,7 @@
 本插件（MaiMai DX 双源查分器）是组合与修改性作品，整体以 **AGPL-3.0-only**
 分发（见插件根目录 `LICENSE`；因 B50 渲染部分改编自 AGPL-3.0 项目，故采用
 AGPL 而非 GPL）。本文件汇总所有被使用、
-改编或引用的第三方项目、素材与字体及其许可，修订于 2026-09-02。
+改编或引用的第三方项目、素材与字体及其许可，修订于 2026-09-03。
 
 ## 随插件分发的素材
 
@@ -11,12 +11,12 @@ AGPL 而非 GPL）。本文件汇总所有被使用、
 | --- | --- | --- |
 | `assets/maimai/class_rank/`、`assets/maimai/course_rank/` | [Lxns-Network/maimai-prober-frontend](https://github.com/Lxns-Network/maimai-prober-frontend)（`public/assets/maimai/`） | MIT，Copyright (c) 2026 Lxns-Network |
 | `assets/logo_background.webp` | 同上（`public/logo_background.webp`） | MIT，Copyright (c) 2026 Lxns-Network |
-| `assets/awmc_core/mai/`（AWMC/Yuzu B50 静态素材） | [Yuri-YuzuChaN/maimaiDX](https://github.com/Yuri-YuzuChaN/maimaiDX)（Resource CN1.55 static 包） | MIT，Copyright (c) 2021 Yuri-YuzuChaN |
+| `assets/awmc_core/mai/`（AWMC/Yuzu B50 与信息卡静态素材） | [Yuri-YuzuChaN/maimaiDX](https://github.com/Yuri-YuzuChaN/maimaiDX)（Resource CN1.55 static 包） | MIT，Copyright (c) 2021 Yuri-YuzuChaN |
 | `assets/awmc_core/font/ResourceHanRoundedCN-Bold.ttf` | [CyanoHao/Resource-Han-Rounded](https://github.com/CyanoHao/Resource-Han-Rounded) | SIL OFL 1.1，Copyright (c) 2018-2022 Cyano Hao / Portions (c) 2014-2021 Adobe |
 | `assets/awmc_core/font/Torus SemiBold.otf` | Paulo Goode（Torus） | 商业字体，仅限非商业使用，详见 `assets/awmc_core/NOTICE` |
 | `assets/fonts/VarelaRound-Regular.ttf` | Varela Round Project | SIL OFL 1.1，见 `assets/fonts/OFL.txt` |
 
-## B50 渲染代码与版式的参考项目
+## B50 / 信息卡渲染代码与版式的参考项目
 
 | 项目 | 许可 |
 | --- | --- |
@@ -30,7 +30,7 @@ AGPL 而非 GPL）。本文件汇总所有被使用、
 
 版式设计署名（成品图中保留）：
 
-- `Designed by Yuri-YuzuChaN & BlueDeer233`（B50 版式）
+- `Designed by Yuri-YuzuChaN & BlueDeer233`（B50 / 信息卡版式）
 - `Designed by 寒桠@OneCatBot`（分析版式，上游保留署名）
 
 ## 数据与接口参考

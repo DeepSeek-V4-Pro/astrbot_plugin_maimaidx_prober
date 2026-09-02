@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-"""AstrBot 适配版：MaiMai DX 双源查分器（v1.0）。
+"""AstrBot 适配版：MaiMai DX 双源查分器（v1.1）。
 
 舞萌 DX 查分插件的 AstrBot 入口。核心逻辑按「命令 / 服务 / 渲染 / 客户端 /
 存储」分层放在 ``core/`` 包，这里完成与 AstrBot Star 体系的对接：

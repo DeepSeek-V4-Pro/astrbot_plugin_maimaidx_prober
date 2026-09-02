@@ -1,3 +1,4 @@
+# MaiMai DX 查分器（AstrBot 适配 v1.1）依赖。
 # AstrBot 加载插件时会自动安装以下 pip 依赖。
 # 注意：Playwright 的 Chromium 浏览器不会自动下载，图片类命令首次使用前请运行：
 #   python -m playwright install chromium
