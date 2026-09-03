@@ -17,6 +17,7 @@ from typing import Any
 
 from PIL import Image, ImageDraw, ImageFont
 
+from ..assets import font_path
 from ..rating import compute_ra
 
 ASSETS_ROOT = Path(__file__).resolve().parent.parent.parent / "assets" / "awmc_core"
@@ -128,13 +129,7 @@ def _theme_path(assets: Path, filename: str) -> Path:
 
 
 def _font_path(assets: Path, torus: bool = False) -> Path:
-    font = assets / "font"
-    names = (
-        ("Torus SemiBold.otf", "ResourceHanRoundedCN-Bold.ttf")
-        if torus
-        else ("ResourceHanRoundedCN-Bold.ttf", "ResourceHanRoundedCN.otf")
-    )
-    return next((font / name for name in names if (font / name).is_file()), font / names[0])
+    return font_path(assets, torus)
 
 
 def _open(path: Path, size: tuple[int, int] | None = None) -> Image.Image:

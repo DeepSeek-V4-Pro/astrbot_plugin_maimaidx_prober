@@ -18,7 +18,8 @@ astrbot_plugin_maimaidx_prober/
 │  └─ renderers/          # HTML 面板渲染 + B50 / 信息卡 PIL 渲染
 ├─ assets/                # 本地素材（B50 版式、字体、曲绘）
 └─ scripts/
-   └─ quick_command_test.py   # 只读回归脚本
+   ├─ quick_command_test.py   # 只读回归脚本
+   └─ download_font.py        # 可选：下载 AWMC 中文字体
 ```
 
 ## 分层约定
@@ -59,6 +60,10 @@ astrbot_plugin_maimaidx_prober/
 
 B50 / AP50 不走 HTML，而是 `core/renderers/b50_awmc_pillow.py` 的 PIL 版式，
 素材在 `assets/awmc_core`，曲绘优先本地 `assets/awmc/mai/cover`，缺失时在线回退。
+中文字体优先读取 `assets/awmc_core/font/ResourceHanRoundedCN-Bold.ttf`
+（可通过 `python scripts/download_font.py` 单独下载）；未放入时按平台顺序
+回退到系统中文字体，最后回退到 `VarelaRound-Regular.ttf`。下载后的字体已
+被 `.gitignore` 忽略，确认本地渲染效果后不会被误提交。
 
 单曲详情与落雪单曲最佳走 `core/renderers/awmc_info_pillow.py`：直接按
 `chart_info.png` / `play_info.png` AWMC 模板拼版，同样优先本地曲绘、远程兜底。

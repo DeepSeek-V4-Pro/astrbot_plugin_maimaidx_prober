@@ -12,7 +12,7 @@ AGPL 而非 GPL）。本文件汇总所有被使用、
 | `assets/maimai/class_rank/`、`assets/maimai/course_rank/` | [Lxns-Network/maimai-prober-frontend](https://github.com/Lxns-Network/maimai-prober-frontend)（`public/assets/maimai/`） | MIT，Copyright (c) 2026 Lxns-Network |
 | `assets/logo_background.webp` | 同上（`public/logo_background.webp`） | MIT，Copyright (c) 2026 Lxns-Network |
 | `assets/awmc_core/mai/`（AWMC/Yuzu B50 与信息卡静态素材） | [Yuri-YuzuChaN/maimaiDX](https://github.com/Yuri-YuzuChaN/maimaiDX)（Resource CN1.55 static 包） | MIT，Copyright (c) 2021 Yuri-YuzuChaN |
-| `assets/awmc_core/font/ResourceHanRoundedCN-Bold.ttf` | [CyanoHao/Resource-Han-Rounded](https://github.com/CyanoHao/Resource-Han-Rounded) | SIL OFL 1.1，Copyright (c) 2018-2022 Cyano Hao / Portions (c) 2014-2021 Adobe |
+| `assets/awmc_core/font/ResourceHanRoundedCN-Bold.ttf`（不随插件分发，可选单独下载） | [CyanoHao/Resource-Han-Rounded](https://github.com/CyanoHao/Resource-Han-Rounded) | SIL OFL 1.1，Copyright (c) 2018-2022 Cyano Hao / Portions (c) 2014-2021 Adobe；运行时系统字体回退，可运行 `python scripts/download_font.py` 获取 |
 | `assets/awmc_core/font/Torus SemiBold.otf` | Paulo Goode（Torus） | 商业字体，仅限非商业使用，详见 `assets/awmc_core/NOTICE` |
 | `assets/fonts/VarelaRound-Regular.ttf` | Varela Round Project | SIL OFL 1.1，见 `assets/fonts/OFL.txt` |
 

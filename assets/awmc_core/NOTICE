@@ -26,11 +26,14 @@ AWMC / Yuzu B50 / 信息卡素材包（核心渲染文件）
   版权归 SEGA 及其相关运营方所有，仅用于非商业的玩家成绩展示。
 
 字体：
-  ResourceHanRoundedCN-Bold.ttf
+  ResourceHanRoundedCN-Bold.ttf（不随插件分发）
     Copyright (c) 2018-2022 Cyano Hao,
     Portions Copyright (c) 2014-2021 Adobe.
     Licensed under SIL Open Font License 1.1.
     来源：https://github.com/CyanoHao/Resource-Han-Rounded
+    为满足插件 16 MiB 体积限制，本仓库不捆绑该字体；
+    可运行 `python scripts/download_font.py` 单独下载并放入本目录；
+    未下载时运行时优先加载系统 CJK 字体，缺失时回退英文/数字字体。
 
   Torus SemiBold.otf
     Copyright (c) 2017 Paulo Goode. All rights reserved.

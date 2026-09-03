@@ -30,6 +30,16 @@
 - 配置版本统一提升到 `config_version = 3.3.0`，与上游 3.3 发布保持一致；
 - 图片署名与 User-Agent 保持 AstrBot 版本：`AstrBot/1.1`。
 
+### 体积与字体
+
+- 为满足 AstrBot 插件包 16 MiB 体积限制，
+  `assets/awmc_core/font/ResourceHanRoundedCN-Bold.ttf` 不再随插件分发；
+- Pillow 渲染保留对本地字体文件的读取，未放置时按平台自动回退系统 CJK
+  字体，最后回退到插件自带的 Varela Round；
+- 需要 AWMC 原版圆体时，可执行 `python scripts/download_font.py` 单独下载，
+  或下载官方 `RHR-CN-0.990.7z` 后手动放入
+  `assets/awmc_core/font/`；该文件已加入 `.gitignore`，不会误提交。
+
 ## 1.0.0（2026-09-02）
 
 首个 AstrBot 适配版。

@@ -171,11 +171,41 @@ AstrBot 版的舞萌 DX 双源查分插件，连接
 
 - `core/`：业务模块（命令 / 服务 / 渲染 / 客户端 / 存储）；
 - `core/compat.py`：命令层与 AstrBot 之间的轻量适配基座；
-- `assets/awmc_core`（约 19MB）：B50 / 单曲信息卡的 AWMC 贴图与字体，**必需**；
+- `assets/awmc_core`（约 10MB）：B50 / 单曲信息卡的 AWMC 贴图，**必需**；
+  Pillow 渲染默认使用系统 CJK 字体，中文字体不再捆绑。
 - `assets/awmc/mai/cover`（约 388MB）：B50 曲绘离线缓存，**可选，不随仓库分发**。
   未放置时 B50 会从水鱼 / lxns 在线拉取曲绘，首次渲染稍慢；需要离线时自行把
   曲绘包放到该目录即可（已被 `.gitignore` 忽略）。
 - `scripts/quick_command_test.py`：只读回归脚本（服务层 + 渲染器）。
+- `scripts/download_font.py`：可选的中文字体下载脚本。
+
+### 中文字体（可选）
+
+为满足插件包 16 MiB 体积限制，仓库不再捆绑
+`ResourceHanRoundedCN-Bold.ttf`（约 14MB）。未下载时，B50 / 信息卡的
+Pillow 渲染会自动使用系统中文字体，不影响正常使用。
+
+如需复现 AWMC 原版的圆体效果，可以单独下载并解压：
+
+```bash
+# Windows PowerShell / Linux / macOS 通用
+python scripts/download_font.py
+```
+
+脚本会自动下载 [Resource Han Rounded 官方发布包](https://github.com/CyanoHao/Resource-Han-Rounded/releases/tag/v0.990)
+并只提取 `ResourceHanRoundedCN-Bold.ttf`。请先在 AstrBot 运行环境安装
+`py7zr`（`pip install py7zr`）或 7-Zip / p7zip，脚本会优先尝试 py7zr，
+再回退到系统 `7z`、`7za`、`7zr`。
+
+也可以手动下载 `RHR-CN-0.990.7z`，解压后把
+`ResourceHanRoundedCN-Bold.ttf` 放到：
+
+```text
+assets/awmc_core/font/ResourceHanRoundedCN-Bold.ttf
+```
+
+渲染器始终优先读取该文件；文件不存在时才回退系统字体。
+该文件已被 `.gitignore` 忽略，不会随仓库再次提交。
 
 ## 常见问题 FAQ
 

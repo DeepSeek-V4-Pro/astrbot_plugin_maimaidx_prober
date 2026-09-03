@@ -27,8 +27,10 @@
     SIL Open Font License 1.1（见 assets/fonts/OFL.txt），
     Copyright 2023 The Varela Round Project Authors，
     Reserved Font Names 'Varela'、'Varela Round'。
-  - assets/awmc_core/font/ResourceHanRoundedCN-Bold.ttf：
-    SIL Open Font License 1.1（见 assets/awmc_core/NOTICE）。
+  - assets/awmc_core/font/ResourceHanRoundedCN-Bold.ttf（不随插件分发）：
+    SIL Open Font License 1.1（见 assets/awmc_core/NOTICE）；
+    为满足插件 16 MiB 体积限制，运行时优先使用系统 CJK 字体；可通过
+    `python scripts/download_font.py` 单独下载后放入本地目录。
   - assets/awmc_core/font/Torus SemiBold.otf：
     商业字体，详见 assets/awmc_core/NOTICE。
 

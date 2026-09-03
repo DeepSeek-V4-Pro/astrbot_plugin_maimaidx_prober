@@ -10,5 +10,8 @@ aliases.json
 lxns_bindings.json
 df_oauth_bindings.json
 
+# 可选下载的 AWMC 中文字体（约 14MB），不提交到仓库
+assets/awmc_core/font/ResourceHanRoundedCN-Bold.ttf
+
 # AWMC 完整曲绘包（体积较大，本地保留；提交仓库时忽略，B50 自动在线回退）
 assets/awmc/
