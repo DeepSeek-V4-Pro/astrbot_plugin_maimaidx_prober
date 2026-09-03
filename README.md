@@ -1,4 +1,4 @@
-# MaiMai DX 查分器（AstrBot 适配 · v1.1.0）
+# MaiMai DX 查分器（AstrBot 适配 · v1.1.1）
 
 AstrBot 版的舞萌 DX 双源查分插件，连接
 [diving-fish（水鱼）](https://www.diving-fish.com) 与

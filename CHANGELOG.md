@@ -1,5 +1,16 @@
 # 更新日志
 
+## 1.1.1（2026-09-03）
+
+### 修复
+
+- 为满足 AstrBot 插件包 16 MiB 限制，移除
+  `assets/awmc_core/font/ResourceHanRoundedCN-Bold.ttf`；
+- Pillow 渲染保留本地字体读取，未放置时按平台回退系统 CJK 字体，
+  最后回退到插件自带的 Varela Round；
+- 新增 `python scripts/download_font.py` 可选下载脚本，并补充说明文件；
+- Cloud 已占用 `1.1.0` 版本号，本次改为 `1.1.1` 重新提交审核。
+
 ## 1.1.0（2026-09-03）
 
 同步 MaiBot 上游 `maimaidx_prober` v3.3.0 内容。

@@ -67,7 +67,7 @@ def _download(url: str, target: Path, force: bool = False) -> None:
     target.parent.mkdir(parents=True, exist_ok=True)
     request = urllib.request.Request(
         url,
-        headers={"User-Agent": "astrbot_plugin_maimaidx_prober/1.1"},
+        headers={"User-Agent": "astrbot_plugin_maimaidx_prober/1.1.1"},
     )
     print(f"下载中：{url}")
     with urllib.request.urlopen(request, timeout=60) as response:
